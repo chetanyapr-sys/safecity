@@ -35,8 +35,9 @@ router.post("/", protect, async (req: AuthRequest, res) => {
     let predictedSeverity = "Low";
 
     try {
+      const mlServiceUrl = process.env.ML_SERVICE_URL || "http://localhost:8000";
       const mlResponse = await axios.post(
-        "http://localhost:8000/predict-severity",
+        `${mlServiceUrl}/predict-severity`,
         { description }
       );
       predictedSeverity = mlResponse.data.severity;
