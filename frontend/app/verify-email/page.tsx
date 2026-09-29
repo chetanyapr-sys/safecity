@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ShieldCheck, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 import api from "@/lib/api";
 
-export default function VerifyEmail() {
+function VerifyEmailContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token");
@@ -38,7 +38,8 @@ export default function VerifyEmail() {
       .catch((err) => {
         setStatus("error");
         setMessage(
-          err.response?.data?.message || "Verification failed. Please try again."
+          err.response?.data?.message ||
+            "Verification failed. Please try again."
         );
       });
   }, [token, router]);
@@ -83,5 +84,13 @@ export default function VerifyEmail() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function VerifyEmail() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <VerifyEmailContent />
+    </Suspense>
   );
 }
