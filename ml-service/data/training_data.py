@@ -1,0 +1,33 @@
+training_data = [
+    ("A small pothole on the side of the road", "Low"),
+    ("Streetlight not working for a few days", "Low"),
+    ("Garbage not collected on time", "Low"),
+    ("Minor scratch on parked car, no injuries", "Low"),
+    ("Broken bench in the park", "Low"),
+    ("Water leakage from a pipe near the footpath", "Low"),
+    ("Stray dog barking loudly in the street", "Low"),
+
+    ("Traffic signal not working at a busy intersection", "Medium"),
+    ("Two vehicles had a minor collision, no injuries", "Medium"),
+    ("Loud altercation between two neighbors", "Medium"),
+    ("Suspicious person loitering near school gate", "Medium"),
+    ("Waterlogging causing traffic delays", "Medium"),
+    ("Group of people fighting verbally in public", "Medium"),
+    ("Illegal parking blocking emergency exit", "Medium"),
+
+    ("Robbery attempt reported, purse snatched", "High"),
+    ("Car accident with injuries reported", "High"),
+    ("Woman harassed by a group of men on the street", "High"),
+    ("Building under construction shows major cracks", "High"),
+    ("Fight broke out with people getting hurt", "High"),
+    ("Electric wire hanging dangerously low on main road", "High"),
+    ("Break-in attempt at a residential house", "High"),
+
+    ("Fire broke out in a residential building", "Critical"),
+    ("Person seen with a weapon threatening others", "Critical"),
+    ("Major accident, multiple people seriously injured", "Critical"),
+    ("Explosion heard near market area", "Critical"),
+    ("Armed robbery in progress at a shop", "Critical"),
+    ("Building collapsed, people trapped inside", "Critical"),
+    ("Stabbing incident reported near bus stand", "Critical"),
+]
