@@ -1,18 +1,9 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_APP_PASSWORD,
-  },
-}as any);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface EmailOptions {
   to: string;
@@ -59,10 +50,12 @@ export const sendEmail = async ({
       `
       : "";
 
-    await transporter.sendMail({
-      from: `"SafeCity" <${process.env.EMAIL_USER}>`,
+    const { error } = await resend.emails.send({
+      from: "SafeCity <onboarding@resend.dev>",
       to,
+            replyTo: process.env.EMAIL_USER || "",
       subject,
+      text: message,
       html: `
         <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; background: #0a0a0a; padding: 32px 16px;">
           <div style="max-width: 480px; margin: 0 auto; background: #111111; border: 1px solid #262626; border-radius: 12px; overflow: hidden;">
@@ -94,7 +87,12 @@ export const sendEmail = async ({
         </div>
       `,
     });
-    console.log("Email sent to", to);
+
+    if (error) {
+      console.error("Email sending failed:", error);
+    } else {
+      console.log("Email sent to", to);
+    }
   } catch (error) {
     console.error("Email sending failed:", error);
   }
