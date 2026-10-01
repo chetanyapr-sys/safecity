@@ -1,9 +1,7 @@
-import { Resend } from "resend";
+import axios from "axios";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface EmailOptions {
   to: string;
@@ -50,13 +48,7 @@ export const sendEmail = async ({
       `
       : "";
 
-    const { error } = await resend.emails.send({
-      from: "SafeCity <onboarding@resend.dev>",
-      to,
-            replyTo: process.env.EMAIL_USER || "",
-      subject,
-      text: message,
-      html: `
+    const htmlContent = `
         <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; background: #0a0a0a; padding: 32px 16px;">
           <div style="max-width: 480px; margin: 0 auto; background: #111111; border: 1px solid #262626; border-radius: 12px; overflow: hidden;">
             
@@ -85,15 +77,28 @@ export const sendEmail = async ({
 
           </div>
         </div>
-      `,
-    });
+      `;
 
-    if (error) {
-      console.error("Email sending failed:", error);
-    } else {
-      console.log("Email sent to", to);
-    }
-  } catch (error) {
-    console.error("Email sending failed:", error);
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: { name: "SafeCity", email: process.env.EMAIL_USER },
+        to: [{ email: to }],
+        subject,
+        textContent: message,
+        htmlContent,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }
+    );
+
+    console.log("Email sent to", to);
+  } catch (error: any) {
+    console.error("Email sending failed:", error.response?.data || error.message);
   }
 };
